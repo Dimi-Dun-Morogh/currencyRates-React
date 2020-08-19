@@ -1,14 +1,12 @@
 import React from 'react';
-import './header.scss'
-import {Navbar} from '../navbar/Navbar';
+import './header.scss';
+import { Navbar } from '../navbar/Navbar';
 
-export const Header =() =>{
-
-
+export const Header = () => {
   return (
-    <div className='header'>
-      <div className='headerWrap'>
-        <div className='logo'>
+    <div className="header">
+      <div className="headerWrap">
+        <div className="logo">
           <a href="/">
             <h2>RateApp</h2>
           </a>
@@ -16,11 +14,11 @@ export const Header =() =>{
 
         <Navbar />
 
-        <div className='person'>
-          <i className='fa fa-user' aria-hidden='true'></i>
+        <div className="person">
+          <i className="fa fa-user" aria-hidden="true" />
         </div>
       </div>
-      <hr/>
+      <hr />
     </div>
-  )
-}
+  );
+};
