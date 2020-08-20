@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 
 import './App.scss';
@@ -20,20 +21,67 @@ class App extends React.Component {
       rate: '',
       date: '',
       currency: {
-        USD: { name: 'Доллар США', flag: USD, course: '8888' },
-        RUB: { name: 'Российский Рубль', flag: RUB, course: '8888' },
-        JPY: { name: 'Японская Йена', flag: JPY, course: '8888' },
-        GBP: { name: 'Фунт Стерлингов', flag: GBP, course: '8888' },
-        EUR: { name: 'Евро', flag: EUR, course: '8888' },
-        CNY: { name: 'Китайский Юань', flag: CNY, course: '8888' },
-        CHF: { name: 'Швейцарский Франк', flag: CHF, course: '8888' },
+        USD: { name: 'Доллар США', flag: USD, course: '' },
+        RUB: { name: 'Российский Рубль', flag: RUB, course: '' },
+        JPY: { name: 'Японская Йена', flag: JPY, course: '' },
+        GBP: { name: 'Фунт Стерлингов', flag: GBP, course: '' },
+        EUR: { name: 'Евро', flag: EUR, course: '' },
+        CNY: { name: 'Китайский Юань', flag: CNY, course: '' },
+        CHF: { name: 'Швейцарский Франк', flag: CHF, course: '' },
       },
+      // calculator
+      InputValue: 100,
+      currencyValue: 'USD',
+      result: null,
     };
   }
 
+  componentDidMount() {
+    fetch(`https://api.exchangeratesapi.io/latest?base=${this.state.base}`)
+      .then((response) => response.json())
+      .then((response) => {
+        const rateArr = ['USD', 'CNY', 'EUR', 'GBP', 'JPY', 'RUB', 'CHF'];
+        const currency = { ...this.state.currency };
+
+        for (let i = 0; i < rateArr.length; i += 1) {
+          currency[rateArr[i]].course = response.rates[rateArr[i]];
+        }
+        this.setState({
+          rate: response.rates,
+          date: response.date,
+          currency,
+        });
+      });
+  }
+
+  inputValueHandler = (event) => {
+    this.setState({ InputValue: event.target.value, result: null });
+  };
+
+  currencyValueHandler = (event) => {
+    this.setState({ currencyValue: event.target.value, result: null });
+  };
+
+  calculatorHandler = async (value) => {
+    let result;
+    await fetch(`https://api.exchangeratesapi.io/latest?base=RUB`)
+      .then((response) => response.json())
+      .then((response) => {
+        result = response.rates[value] * this.state.InputValue;
+      });
+    this.setState({ result });
+  };
+
   render() {
     return (
-      <RateContext.Provider value={{ state: this.state }}>
+      <RateContext.Provider
+        value={{
+          state: this.state,
+          inputValueHandler: this.inputValueHandler,
+          calculatorHandler: this.calculatorHandler,
+          currencyValueHandler: this.currencyValueHandler,
+        }}
+      >
         <Layout />
       </RateContext.Provider>
     );

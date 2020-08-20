@@ -4,6 +4,7 @@ module.exports = {
     "plugin:prettier/recommended",
     "prettier/react"
   ],
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "commonjs": true,
@@ -28,6 +29,7 @@ module.exports = {
         "ignoreRegExpLiterals": true
       }
     ],
+    "react/destructuring-assignment": 'off',
     "import/prefer-default-export": "off",
   }
 }
