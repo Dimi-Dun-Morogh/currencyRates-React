@@ -7,16 +7,24 @@ export const Navbar = () => {
     <nav>
       <ul>
         <li>
-          <NavLink to="/">Главная</NavLink>
+          <NavLink exact to="/">
+            Главная
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/calc">Калькулятор</NavLink>
+          <NavLink exact to="/calc">
+            Калькулятор
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/sample">Выборки</NavLink>
+          <NavLink exact to="/sample">
+            Выборки
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/info">Информация</NavLink>
+          <NavLink exact to="/info">
+            Информация
+          </NavLink>
         </li>
       </ul>
     </nav>
