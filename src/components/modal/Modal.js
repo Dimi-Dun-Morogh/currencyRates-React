@@ -16,9 +16,9 @@ export const Modal = () => {
   const windowHandler = (id) => {
     setValue(id);
   };
-if(state.showModal) {
-  cls.push('modalShow')
-}
+  if (state.showModal) {
+    cls.push('modalShow');
+  }
 
   return (
     <div className={cls.join(' ')}>
@@ -48,6 +48,10 @@ if(state.showModal) {
         </div>
         <hr />
       </>
+      <div style={{ textAlign: 'center' }}>
+        <h2 style={{ color: '#f01f30' }}>{state.err}</h2>
+      </div>
+
       {value === 'signUp' ? <SignUp /> : <Login />}
     </div>
   );

@@ -43,6 +43,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      auth: false,
+      err: '',
+
       formControls: {
         email: {
           value: '',
@@ -84,6 +87,7 @@ class App extends React.Component {
       // calculator
       InputValue: 100,
       currencyValue: 'USD',
+      currencyValueToExchange: 'RUB',
       result: null,
 
       // sample
@@ -128,9 +132,17 @@ class App extends React.Component {
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCWRV3Vl-yHPmHCmmzK8Byv2B-amRFlsio',
         authData,
       );
-      console.log(response);
+      if (response.data.idToken) {
+        const formControls = { ...this.state.formControls };
+        formControls.email.value = '';
+        formControls.password.value = '';
+        this.setState({ auth: true, showModal: false, err: '', formControls });
+      } else {
+        this.setState({ err: 'Ошибка' });
+      }
     } catch (error) {
       console.log(error);
+      this.setState({ err: 'Ошибка' });
     }
   };
 
@@ -146,9 +158,15 @@ class App extends React.Component {
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCWRV3Vl-yHPmHCmmzK8Byv2B-amRFlsio',
         authData,
       );
-      console.log(response);
+      if (response.data.idToken) {
+        const formControls = { ...this.state.formControls };
+        formControls.email.value = '';
+        formControls.password.value = '';
+        this.setState({ auth: true, showModal: false, err: '', formControls });
+      }
     } catch (error) {
       console.log(error);
+      this.setState({ err: 'Ошибка' });
     }
   };
 
@@ -254,9 +272,16 @@ class App extends React.Component {
     this.setState({ currencyValue: event.target.value, result: null });
   };
 
-  calculatorHandler = async (value) => {
+  currencyToExchangeValueHandler = (event) => {
+    this.setState({
+      currencyValueToExchange: event.target.value,
+      result: null,
+    });
+  };
+
+  calculatorHandler = async ([value, value2]) => {
     let result;
-    await fetch(`https://api.exchangeratesapi.io/latest?base=RUB`)
+    await fetch(`https://api.exchangeratesapi.io/latest?base=${value2}`)
       .then((response) => response.json())
       .then((response) => {
         result = response.rates[value] * this.state.InputValue;
@@ -282,6 +307,7 @@ class App extends React.Component {
           modalHideHandler: this.modalHideHandler,
           loginHandler: this.loginHandler,
           signUpHandler: this.signUpHandler,
+          currencyToExchangeValueHandler: this.currencyToExchangeValueHandler,
         }}
       >
         <Dark

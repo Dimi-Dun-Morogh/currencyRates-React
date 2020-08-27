@@ -10,7 +10,10 @@ export const CountResult = () => {
         {state.result ? (
           <li>
             <p>
-              <span>{state.InputValue}&nbsp;RUB</span>=
+              <span>
+                {state.InputValue}&nbsp;{state.currencyValueToExchange}
+              </span>
+              =
               <span>
                 {state.result}&nbsp;
                 {state.currencyValue}

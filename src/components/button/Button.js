@@ -22,6 +22,7 @@ Button.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.object,
+    PropTypes.array,
   ]),
 };
 Button.defaultProps = {

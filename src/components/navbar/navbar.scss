@@ -31,3 +31,10 @@ nav {
   color: #fff;
   padding: 5px;
 }
+.disabled {
+  color :#d9d5d5;;
+}
+.disabled:hover {
+  color :#d9d5d5;
+  cursor:unset;
+}

@@ -8,6 +8,7 @@ export const Counter = () => {
     state,
     inputValueHandler,
     currencyValueHandler,
+    currencyToExchangeValueHandler,
     calculatorHandler,
   } = useContext(RateContext);
   return (
@@ -23,7 +24,12 @@ export const Counter = () => {
             value={state.InputValue}
             onChange={inputValueHandler}
           />
-          &nbsp; RUB
+          {/* &nbsp; RUB */}
+          <select onChange={currencyToExchangeValueHandler}>
+            {Object.keys(state.currency).map((item) => {
+              return <option key={item}>{item}</option>;
+            })}
+          </select>
         </span>
         <select onChange={currencyValueHandler}>
           {Object.keys(state.currency).map((item) => {
@@ -33,11 +39,8 @@ export const Counter = () => {
         <Button
           text="Посчитать"
           click={calculatorHandler}
-          arg={state.currencyValue}
+          arg={([state.currencyValue, state.currencyValueToExchange])}
         />
-        {/* <button onClick={() => calculatorHandler(state.currencyValue)}>
-          Посчитать
-        </button> */}
       </div>
     </div>
   );
