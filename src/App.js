@@ -13,6 +13,12 @@ import GBP from './image/GBP.png';
 import JPY from './image/JPY.png';
 import RUB from './image/RUB.png';
 import USD from './image/USD.png';
+import {
+  firebaseLogin,
+  getUserIdToken,
+  firebaseLogout,
+  firebaseSignUp,
+} from './services/firebase/auth.service';
 import { Dark } from './components/dark/Dark';
 import { Modal } from './components/modal/Modal';
 import { Input } from './components/input/Input';
@@ -43,7 +49,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      auth: false,
+      auth: Boolean(JSON.parse(localStorage.getItem('authUser'))),
       err: '',
 
       formControls: {
@@ -87,7 +93,7 @@ class App extends React.Component {
       // calculator
       InputValue: 100,
       currencyValue: 'USD',
-      currencyValueToExchange: 'RUB',
+      currencyValueToExchange: 'USD',
       result: null,
 
       // sample
@@ -121,18 +127,13 @@ class App extends React.Component {
   }
 
   loginHandler = async () => {
-    const authData = {
-      email: this.state.formControls.email.value,
-      password: this.state.formControls.password.value,
-      returnSecureToken: true,
-    };
-
+    const { email, password } = this.state.formControls;
     try {
-      const response = await axios.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCWRV3Vl-yHPmHCmmzK8Byv2B-amRFlsio',
-        authData,
-      );
-      if (response.data.idToken) {
+      await firebaseLogin(email.value, password.value);
+      const token = await getUserIdToken();
+      console.log(token);
+      if (token) {
+        localStorage.setItem('token', token);
         const formControls = { ...this.state.formControls };
         formControls.email.value = '';
         formControls.password.value = '';
@@ -146,6 +147,11 @@ class App extends React.Component {
     }
   };
 
+  logoutHandler = () => {
+    firebaseLogout();
+    this.setState({ auth: false });
+  };
+
   signUpHandler = async () => {
     const authData = {
       email: this.state.formControls.email.value,
@@ -154,16 +160,12 @@ class App extends React.Component {
     };
 
     try {
-      const response = await axios.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCWRV3Vl-yHPmHCmmzK8Byv2B-amRFlsio',
-        authData,
-      );
-      if (response.data.idToken) {
+      firebaseSignUp(authData.email, authData.password).then(() => {
         const formControls = { ...this.state.formControls };
         formControls.email.value = '';
         formControls.password.value = '';
         this.setState({ auth: true, showModal: false, err: '', formControls });
-      }
+      });
     } catch (error) {
       console.log(error);
       this.setState({ err: 'Ошибка' });
@@ -308,6 +310,7 @@ class App extends React.Component {
           loginHandler: this.loginHandler,
           signUpHandler: this.signUpHandler,
           currencyToExchangeValueHandler: this.currencyToExchangeValueHandler,
+          logoutHandler: this.logoutHandler,
         }}
       >
         <Dark

@@ -1,0 +1,1 @@
+https://rateapp-react.firebaseapp.com

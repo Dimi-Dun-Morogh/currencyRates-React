@@ -3,6 +3,7 @@ import './modal.scss';
 import { Login } from '../login/Login';
 import { SignUp } from '../signUp/SignUp';
 import { RateContext } from '../../context/RateContext';
+import { Logout } from '../logout/Logout';
 
 export const Modal = () => {
   const { state, modalHideHandler } = useContext(RateContext);
@@ -25,20 +26,24 @@ export const Modal = () => {
       <>
         <div className="modalHead">
           <ul>
-            {links.map((link) => {
-              return (
-                <li
-                  style={{
-                    fontWeight: link.id === value ? 'bold' : 'normal',
-                    cursor: 'pointer',
-                  }}
-                  key={link.name}
-                  onClick={() => windowHandler(link.id)}
-                >
-                  {link.name}
-                </li>
-              );
-            })}
+            {state.auth ? (
+              <li>logout</li>
+            ) : (
+              links.map((link) => {
+                return (
+                  <li
+                    style={{
+                      fontWeight: link.id === value ? 'bold' : 'normal',
+                      cursor: 'pointer',
+                    }}
+                    key={link.name}
+                    onClick={() => windowHandler(link.id)}
+                  >
+                    {link.name}
+                  </li>
+                );
+              })
+            )}
           </ul>
           <i
             className="fa fa-times"
@@ -52,7 +57,7 @@ export const Modal = () => {
         <h2 style={{ color: '#f01f30' }}>{state.err}</h2>
       </div>
 
-      {value === 'signUp' ? <SignUp /> : <Login />}
+      {state.auth ? <Logout /> : value === 'signUp' ? <SignUp /> : <Login />}
     </div>
   );
 };

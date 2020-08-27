@@ -14,6 +14,8 @@ module.exports = {
   },
   "rules": {
     "jsx-a11y/href-no-hash": ["off"],
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-element-interactions":"off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
     "max-len": [
       "warn",
@@ -31,5 +33,6 @@ module.exports = {
     ],
     "react/destructuring-assignment": 'off',
     "import/prefer-default-export": "off",
+    "no-nested-ternary": "off",
   }
 }
